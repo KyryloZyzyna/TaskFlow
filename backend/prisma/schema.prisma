@@ -1,0 +1,80 @@
+// Prisma Schema для TaskFlow
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedBoards  Board[]
+  boardMembers BoardMember[]
+
+  @@map("users")
+}
+
+model Board {
+  id        String   @id @default(cuid())
+  title     String
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  columns Column[]
+  members BoardMember[]
+
+  @@map("boards")
+}
+
+model BoardMember {
+  id        String   @id @default(cuid())
+  boardId   String
+  userId    String
+  role      String   @default("member") // "owner", "member"
+  createdAt DateTime @default(now())
+
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+  @@map("board_members")
+}
+
+model Column {
+  id        String   @id @default(cuid())
+  title     String
+  position  Int
+  boardId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks Task[]
+
+  @@map("columns")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  position    Int
+  columnId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  column Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}
