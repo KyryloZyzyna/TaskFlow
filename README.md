@@ -27,6 +27,12 @@ Real-time collaborative task management app with drag-and-drop functionality.
 </p>
 <p align="center"><i>User registration with email and password</i></p>
 
+### Dashboard
+<p align="center">
+  <img src="docs/screenshots/boards.png" alt="Dashboard with Boards" width="700">
+</p>
+<p align="center"><i>Overview of all project boards with quick access and creation</i></p>
+
 ### Board Management
 <p align="center">
   <img src="docs/screenshots/board.png" alt="Kanban Board" width="700">
