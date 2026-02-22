@@ -1,8 +1,5 @@
 # TaskFlow
 
-![Backend CI](https://github.com/KyryloZyzyna/TaskFlow/workflows/Backend%20CI/badge.svg)
-![Frontend CI](https://github.com/KyryloZyzyna/TaskFlow/workflows/Frontend%20CI/badge.svg)
-
 Real-time collaborative task management app with drag-and-drop functionality.
 
 ## ✨ Features
