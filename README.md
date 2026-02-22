@@ -13,6 +13,34 @@ Real-time collaborative task management app with drag-and-drop functionality.
 - Multi-user collaboration
 - Responsive UI
 
+## 📸 Screenshots
+
+### Login
+<p align="center">
+  <img src="docs/screenshots/login.png" alt="Login Page" width="700">
+</p>
+<p align="center"><i>Secure authentication with JWT tokens and form validation</i></p>
+
+### Sign Up
+<p align="center">
+  <img src="docs/screenshots/sign_up.png" alt="Registration Page" width="700">
+</p>
+<p align="center"><i>User registration with email and password</i></p>
+
+### Board Management
+<p align="center">
+  <img src="docs/screenshots/board.png" alt="Kanban Board" width="700">
+</p>
+<p align="center"><i>Kanban-style board with drag-and-drop task management across columns</i></p>
+
+### Team Collaboration
+<p align="center">
+  <img src="docs/screenshots/invite_members.png" alt="Invite Team Members" width="700">
+</p>
+<p align="center"><i>Invite users by email and manage board access permissions</i></p>
+
+
+
 ## 🛠️ Tech Stack
 
 **Backend:** Node.js, Express, PostgreSQL, Socket.io  
