@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { boardAPI, taskAPI } from '../services/api';
-import type { Board, Task, Column } from '../types';
+import type { Board, Task } from '../types';
 
 interface BoardState {
   boards: Board[];
@@ -19,7 +19,7 @@ interface BoardState {
   updateLocalBoard: (board: Board) => void;
 }
 
-export const useBoardStore = create<BoardState>((set, get) => ({
+export const useBoardStore = create<BoardState>((set) => ({
   boards: [],
   currentBoard: null,
   isLoading: false,
@@ -135,11 +135,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     try {
       await taskAPI.move(taskId, columnId, position);
 
-      // Оновлення локального стану після переміщення
       set(state => {
         if (!state.currentBoard) return state;
 
-        // Знайти task
         let movedTask: Task | null = null;
         const columnsWithoutTask = state.currentBoard.columns.map(col => ({
           ...col,
@@ -154,12 +152,10 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
         if (!movedTask) return state;
 
-        // Додати task в нову колонку
         const updatedColumns = columnsWithoutTask.map(col => {
           if (col.id === columnId) {
             const newTasks = [...col.tasks];
             newTasks.splice(position, 0, movedTask!);
-            // Оновити позиції
             return {
               ...col,
               tasks: newTasks.map((task, idx) => ({ ...task, position: idx }))

@@ -20,7 +20,7 @@ export default function BoardView() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { token, user } = useAuthStore();
-  const { currentBoard, fetchBoard, createTask, deleteTask, updateTask, moveTask } = useBoardStore();
+  const { currentBoard, fetchBoard, createTask, deleteTask, moveTask } = useBoardStore();
   const [activeTask, setActiveTask] = useState<TaskType | null>(null);
   const [showMembers, setShowMembers] = useState(false);
 
@@ -36,12 +36,10 @@ export default function BoardView() {
     if (id) {
       fetchBoard(id);
 
-      // Connect WebSocket
       if (token) {
         socketService.connect(token);
         socketService.joinBoard(id);
 
-        // Listen for real-time updates
         socketService.on('task:created', (data) => {
           console.log('Task created:', data);
           fetchBoard(id);
@@ -86,7 +84,6 @@ export default function BoardView() {
     const activeTaskId = active.id as string;
     const overColumnId = over.id as string;
 
-    // Знайти task та його поточну колонку
     let sourceColumn = currentBoard.columns.find(col =>
       col.tasks.some(task => task.id === activeTaskId)
     );
@@ -96,10 +93,8 @@ export default function BoardView() {
     const task = sourceColumn.tasks.find(t => t.id === activeTaskId);
     if (!task) return;
 
-    // Визначити цільову колонку
     let targetColumn = currentBoard.columns.find(col => col.id === overColumnId);
 
-    // Якщо dropped на task, знайти його колонку
     if (!targetColumn) {
       targetColumn = currentBoard.columns.find(col =>
         col.tasks.some(t => t.id === overColumnId)
@@ -108,18 +103,14 @@ export default function BoardView() {
 
     if (!targetColumn) return;
 
-    // Визначити нову позицію
     let newPosition = 0;
     if (overColumnId !== targetColumn.id) {
-      // Dropped на task
       const overTaskIndex = targetColumn.tasks.findIndex(t => t.id === overColumnId);
       newPosition = overTaskIndex !== -1 ? overTaskIndex : targetColumn.tasks.length;
     } else {
-      // Dropped на колонку
       newPosition = targetColumn.tasks.length;
     }
 
-    // Якщо переміщення в межах тієї ж колонки
     if (sourceColumn.id === targetColumn.id) {
       const oldIndex = sourceColumn.tasks.findIndex(t => t.id === activeTaskId);
       const newIndex = newPosition;
@@ -134,7 +125,6 @@ export default function BoardView() {
         });
       }
     } else {
-      // Переміщення між колонками
       await moveTask(activeTaskId, targetColumn.id, newPosition);
       socketService.emit('task:moved', {
         boardId: currentBoard.id,
@@ -178,7 +168,6 @@ export default function BoardView() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -202,7 +191,6 @@ export default function BoardView() {
         </div>
       </header>
 
-      {/* Board */}
       <main className="p-6 overflow-x-auto">
         <DndContext
           sensors={sensors}
@@ -216,7 +204,6 @@ export default function BoardView() {
                 column={column}
                 onCreateTask={handleCreateTask}
                 onDeleteTask={handleDeleteTask}
-                onUpdateTask={updateTask}
               />
             ))}
           </div>
@@ -234,7 +221,6 @@ export default function BoardView() {
         </DndContext>
       </main>
 
-      {/* Members Panel */}
       {showMembers && (
         <MembersPanel
           boardId={currentBoard.id}
