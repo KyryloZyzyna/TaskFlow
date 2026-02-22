@@ -6,10 +6,9 @@ import type { Task as TaskType } from '../../types';
 interface TaskProps {
   task: TaskType;
   onDelete: (taskId: string) => void;
-  onUpdate: (taskId: string, data: { title?: string; description?: string }) => void;
 }
 
-export default function Task({ task, onDelete, onUpdate }: TaskProps) {
+export default function Task({ task, onDelete }: TaskProps) {
   const {
     attributes,
     listeners,

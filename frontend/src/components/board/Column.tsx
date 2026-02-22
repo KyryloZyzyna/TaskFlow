@@ -9,10 +9,9 @@ interface ColumnProps {
   column: ColumnType;
   onCreateTask: (columnId: string, title: string, description?: string) => void;
   onDeleteTask: (taskId: string) => void;
-  onUpdateTask: (taskId: string, data: { title?: string; description?: string }) => void;
 }
 
-export default function Column({ column, onCreateTask, onDeleteTask, onUpdateTask }: ColumnProps) {
+export default function Column({ column, onCreateTask, onDeleteTask }: ColumnProps) {
   const [showAddTask, setShowAddTask] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
@@ -49,7 +48,6 @@ export default function Column({ column, onCreateTask, onDeleteTask, onUpdateTas
               key={task.id}
               task={task}
               onDelete={onDeleteTask}
-              onUpdate={onUpdateTask}
             />
           ))}
         </SortableContext>
